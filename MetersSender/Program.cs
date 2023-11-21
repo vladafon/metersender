@@ -1,6 +1,12 @@
 using MetersSender;
+using MetersSender.Api.Configuration;
+using MetersSender.Api.SourceIntegration;
+using MetersSender.Common;
 using MetersSender.Common.Models;
 using MetersSender.DataAccess.Database;
+using MetersSender.DataAccess.Repository;
+using MetersSender.Neodom;
+using MetersSender.Saures;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
@@ -61,6 +67,13 @@ builder.Services.AddSwaggerGen(c =>
 
     c.CustomSchemaIds(x => x.FullName);
 }).AddSwaggerGenNewtonsoftSupport();
+
+builder.Services.AddScoped<IConfigurationApiService, ConfigurationApiService>();
+builder.Services.AddScoped<ISourceIntegrationApiService, SourceIntegrationApiService>();
+builder.Services.AddScoped<IRecepientIntegrationApiService, RecepientIntegrationApiService>();
+builder.Services.AddScoped<IDatabaseRepository, PostgreSqlDatabaseRepository>();
+builder.Services.AddScoped<ISourceIntegration, SauresSourceIntegration>();
+builder.Services.AddScoped<IRecepientIntegration, NeodomRecepientIntegration>();
 
 var app = builder.Build();
 

@@ -13,9 +13,6 @@ namespace MetersSender.DataAccess.Database.Configurations
             builder.Property(service => service.Name)
                 .IsRequired()
                 .HasMaxLength(100);
-
-            builder.Property(service => service.ConfigJson)
-                .IsRequired();
         }
     }
 }

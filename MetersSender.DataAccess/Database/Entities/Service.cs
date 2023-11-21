@@ -8,8 +8,6 @@ namespace MetersSender.DataAccess.Database.Entities
 
         public string Name { get; set; }
 
-        public string ConfigJson { get; set; }
-
         public ICollection<House> HousesSource { get; set; }
         
         public ICollection<House> HousesRecipient { get; set; }

@@ -5,9 +5,15 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetersSender", "MetersSender\MetersSender.csproj", "{F3585DFB-FD32-4B7A-8B3C-9060C36499C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.DataAccess", "MetersSender.DataAccess\MetersSender.DataAccess.csproj", "{330BCFAD-A202-4B68-81A6-8E78D8B42F32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetersSender.DataAccess", "MetersSender.DataAccess\MetersSender.DataAccess.csproj", "{330BCFAD-A202-4B68-81A6-8E78D8B42F32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Common", "MetersSender.Common\MetersSender.Common.csproj", "{B4B9D6A6-5BA5-4DE6-80E4-A8A3DE64FC89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetersSender.Common", "MetersSender.Common\MetersSender.Common.csproj", "{B4B9D6A6-5BA5-4DE6-80E4-A8A3DE64FC89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Api", "MetersSender.Api\MetersSender.Api.csproj", "{8DD6292F-99C0-4D3D-A672-4FD54B352263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Saures", "MetersSender.Saures\MetersSender.Saures.csproj", "{733931E7-5779-41D0-A484-9A9A0559EABB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Neodom", "MetersSender.Neodom\MetersSender.Neodom.csproj", "{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{B4B9D6A6-5BA5-4DE6-80E4-A8A3DE64FC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4B9D6A6-5BA5-4DE6-80E4-A8A3DE64FC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4B9D6A6-5BA5-4DE6-80E4-A8A3DE64FC89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DD6292F-99C0-4D3D-A672-4FD54B352263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DD6292F-99C0-4D3D-A672-4FD54B352263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DD6292F-99C0-4D3D-A672-4FD54B352263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DD6292F-99C0-4D3D-A672-4FD54B352263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{733931E7-5779-41D0-A484-9A9A0559EABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{733931E7-5779-41D0-A484-9A9A0559EABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{733931E7-5779-41D0-A484-9A9A0559EABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{733931E7-5779-41D0-A484-9A9A0559EABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
