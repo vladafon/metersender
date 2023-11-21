@@ -74,7 +74,14 @@ namespace MetersSender.Saures
 
                 if (objectMeters?.Sensors != null)
                 {
-                    allObjectMeters.AddRange(objectMeters.Sensors.Where(_ => _?.Meters != null).SelectMany(_ => _.Meters));
+                    var sensors = objectMeters.Sensors.Where(_ => _?.Meters != null).SelectMany(_ => _.Meters).ToList();
+
+                    foreach(var sensor in sensors)
+                    {
+                        sensor.Name = $"{obj.ApartmentAddress} {obj.ApartmentNumber} - {sensor.Name}";
+                    }
+
+                    allObjectMeters.AddRange(sensors);
                 }
             }
 
