@@ -1,11 +1,13 @@
 using MetersSender;
 using MetersSender.Api.Configuration;
+using MetersSender.Api.Readings;
 using MetersSender.Api.SourceIntegration;
 using MetersSender.Common;
 using MetersSender.Common.Models;
 using MetersSender.DataAccess.Database;
 using MetersSender.DataAccess.Repository;
 using MetersSender.Neodom;
+using MetersSender.Readings.Services;
 using MetersSender.Saures;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -71,9 +73,12 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IConfigurationApiService, ConfigurationApiService>();
 builder.Services.AddScoped<ISourceIntegrationApiService, SourceIntegrationApiService>();
 builder.Services.AddScoped<IRecepientIntegrationApiService, RecepientIntegrationApiService>();
+builder.Services.AddScoped<IReadingsApiService, ReadingsApiService>();
 builder.Services.AddScoped<IDatabaseRepository, PostgreSqlDatabaseRepository>();
 builder.Services.AddScoped<ISourceIntegration, SauresSourceIntegration>();
 builder.Services.AddScoped<IRecepientIntegration, NeodomRecepientIntegration>();
+builder.Services.AddScoped<IReadingsService, ReadingsService>();
+builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
 var app = builder.Build();
 

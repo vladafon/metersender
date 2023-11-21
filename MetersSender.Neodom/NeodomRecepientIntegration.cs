@@ -1,6 +1,11 @@
 ﻿using MetersSender.Common;
 using MetersSender.Common.Models;
 using MetersSender.Neodom.Models;
+using MetersSender.Neodom.Models.Configuration;
+using MetersSender.Neodom.Models.Requests;
+using MetersSender.Neodom.Models.Requests.Attributes;
+using MetersSender.Neodom.Models.Responses;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -9,9 +14,11 @@ namespace MetersSender.Neodom
     public class NeodomRecepientIntegration : IRecepientIntegration
     {
         private readonly NeodomConfig _config;
+        private readonly ILogger<NeodomRecepientIntegration> _logger;
 
-        public NeodomRecepientIntegration()
+        public NeodomRecepientIntegration(ILogger<NeodomRecepientIntegration> logger)
         {
+            _logger = logger;
             var json = File.ReadAllText(Consts.ConfigPath);
             _config = JsonConvert.DeserializeObject<NeodomConfig>(json);
         }
@@ -42,32 +49,82 @@ namespace MetersSender.Neodom
         {
             var authCookie = await GetLoginCookieAsync();
 
-            var metersResponse = await new RequestService<MetersResponse>()
-                .MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Form, authCookie, parameters: new Dictionary<string, string>()
+            var propertyInfo = await new RequestService<MyPropertyResponse>(_logger)
+                .MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, authCookie, jsonString: JsonConvert.SerializeObject(new NeodomRequest<string>
                 {
-                    { "service[0][name]", "list_meter" }
-                });
+                    Name = "my_property"
+                }));
+
+            if (propertyInfo?.Property == null)
+            {
+                throw new ArgumentNullException(nameof(propertyInfo.Property), "Не найдена собственность, зарегистрированная в аккаунте.");
+            }
+
+            var houses = propertyInfo.Property
+                .Where(_ => _?.Houses != null)
+                .SelectMany(_ => _.Houses)
+                .ToList();
+
+            // Запомним, какой дом выбран, чтобы потом вернуть его в качестве основного
+            var selectedAccountId = houses
+                .Where(_ => _.IsSelectedAsPrimary)
+                .Select(_ => _.AccountId)
+                .FirstOrDefault();
 
             var result = new List<MeterModel>();
 
-            if (metersResponse?.ListMeter?.ElectricityMeters != null)
+            foreach (var house in houses)
             {
-                result.AddRange(metersResponse.ListMeter.ElectricityMeters.Select(_ => new MeterModel
+                await new RequestService<SwitchPropertyResponse>(_logger)
+                .MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, authCookie, jsonString: JsonConvert.SerializeObject(new NeodomRequest<SwitchPropertyAttributes>
                 {
-                    Id = _.Id.ToString(),
-                    Name = _.Name,
-                    ReadingValue = _.LastReading
-                }).ToList());
+                    Name = "switch_property",
+                    Attributes = new SwitchPropertyAttributes
+                    {
+                        AccountId = house.AccountId
+                    }
+                }));
+
+                var metersResponse = await new RequestService<MetersResponse>(_logger)
+                    .MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Form, authCookie, parameters: new Dictionary<string, string>()
+                    {
+                    { "service[0][name]", "list_meter" }
+                    });
+
+
+                if (metersResponse?.ListMeter?.ElectricityMeters != null)
+                {
+                    result.AddRange(metersResponse.ListMeter.ElectricityMeters.Select(_ => new MeterModel
+                    {
+                        Id = _.Id.ToString(),
+                        Name = $"{house.Address} - {_.Name}",
+                        ReadingValue = _.LastReading
+                    }).ToList());
+                }
+
+                if (metersResponse?.ListMeter?.WaterMeters != null)
+                {
+                    result.AddRange(metersResponse.ListMeter.WaterMeters.Select(_ => new MeterModel
+                    {
+                        Id = _.Id.ToString(),
+                        Name = $"{house.Address} - {_.Name}",
+                        ReadingValue = _.LastReading
+                    }).ToList());
+                }
             }
 
-            if (metersResponse?.ListMeter?.WaterMeters != null)
+            // Меняем собственность обратно на ту, что была
+            if (selectedAccountId != null)
             {
-                result.AddRange(metersResponse.ListMeter.WaterMeters.Select(_ => new MeterModel
-                {
-                    Id = _.Id.ToString(),
-                    Name = _.Name,
-                    ReadingValue = _.LastReading
-                }).ToList());
+                await new RequestService<SwitchPropertyResponse>(_logger)
+                    .MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, authCookie, jsonString: JsonConvert.SerializeObject(new NeodomRequest<SwitchPropertyAttributes>
+                    {
+                        Name = "switch_property",
+                        Attributes = new SwitchPropertyAttributes
+                        {
+                            AccountId = selectedAccountId
+                        }
+                    }));
             }
 
             return result;
@@ -97,7 +154,7 @@ namespace MetersSender.Neodom
 
             var indicationsJson = JsonConvert.SerializeObject(indications);
 
-            var jsonModel = new NeodomModel<IndicationsAttributes>
+            var jsonModel = new NeodomRequest<IndicationsAttributes>
             {
                 Name = "add_indications",
                 Attributes = new IndicationsAttributes
@@ -108,13 +165,13 @@ namespace MetersSender.Neodom
 
             var authCookie = await GetLoginCookieAsync();
 
-            var requestService = new RequestService<LoginResult>();
-            var result = await requestService.MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, authCookie, jsonString: JsonConvert.SerializeObject(jsonModel));
+            var requestService = new RequestService<SendIndicationsResponse>(_logger);
+            await requestService.MakeRequestAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, authCookie, jsonString: JsonConvert.SerializeObject(jsonModel));
         }
 
         private async Task<Cookie> GetLoginCookieAsync()
         {
-            var jsonModel = new NeodomModel<LoginAttributes>
+            var jsonModel = new NeodomRequest<LoginAttributes>
             {
                 Name = "login",
                 Attributes = new LoginAttributes
@@ -124,7 +181,7 @@ namespace MetersSender.Neodom
                 }
             };
 
-            var requestService = new RequestService<LoginResult>();
+            var requestService = new RequestService<LoginResponse>(_logger);
             var result = await requestService.MakeLoginAsync(_config.ApiUrl, "/", Method.Post, RequestType.Json, jsonString: JsonConvert.SerializeObject(jsonModel));
 
             return result;

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace MetersSender.Common.Models
 {
@@ -24,6 +25,12 @@ namespace MetersSender.Common.Models
         /// </summary>
         [JsonProperty("readingValue", Required = Required.Default)]
         public decimal? ReadingValue { get; set; }
+
+        /// <summary>
+        ///     Дата отправки показания счетчика.
+        /// </summary>
+        [JsonProperty("readingSendingDateTime", Required = Required.Default)]
+        public DateTimeOffset? ReadingSendingDateTime { get; set; }
 
         /// <summary>
         ///     Идентификатор счетчика в сервисе источнике.

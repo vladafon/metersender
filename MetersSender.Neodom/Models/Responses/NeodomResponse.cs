@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Neodom.Models
+namespace MetersSender.Neodom.Models.Responses
 {
-    internal class LoginResult
+    internal abstract class NeodomResponse
     {
         [JsonProperty("error")]
         public string Error { get; set; }
-
-        [JsonProperty("login")]
-        public string LoginStatus { get; set; }
 
         [JsonProperty("code")]
         public string Code { get; set; }

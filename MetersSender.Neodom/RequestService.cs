@@ -1,11 +1,18 @@
 ﻿using MetersSender.Neodom.Models;
+using MetersSender.Neodom.Models.Responses;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace MetersSender.Neodom
 {
-    internal class RequestService<T> where T : class
+    internal class RequestService<T> where T : NeodomResponse
     {
+        private readonly ILogger _logger;
+        public RequestService(ILogger logger) 
+        { 
+            _logger = logger;
+        }
         public async Task<T> MakeRequestAsync(string apiUrl, string relativeUrl, Method method, RequestType requestType, Cookie authCookie, Dictionary<string, string> parameters = null, string jsonString = null)
         {
             var contentType = requestType switch
@@ -58,8 +65,18 @@ namespace MetersSender.Neodom
             {
                 throw response.ErrorException ?? new Exception($"Unexpected exception occured during request on {relativeUrl}");
             }
-            
+
             var result = JsonConvert.DeserializeObject<T>(response.Content);
+
+            if (string.IsNullOrEmpty(result.Error))
+            {
+                _logger.LogInformation($"Результат запроса: код {result.Code}");
+            }
+            else
+            {
+                _logger.LogInformation($"Ошибка запроса: код {result.Code}, ошибка {result.Error}");
+                throw new Exception($"Ошибка запроса: код {result.Code}, ошибка {result.Error}");
+            }
 
             return result;
         }
@@ -115,7 +132,7 @@ namespace MetersSender.Neodom
                 throw response.ErrorException ?? new Exception($"Unexpected exception occured during request on {relativeUrl}");
             }
 
-            var requestResult = JsonConvert.DeserializeObject<LoginResult>(response.Content);
+            var requestResult = JsonConvert.DeserializeObject<LoginResponse>(response.Content);
 
             if (requestResult.Error != null)
             {

@@ -1,4 +1,4 @@
-﻿namespace MetersSender.Saures.Models
+﻿namespace MetersSender.Saures.Models.Configuration
 {
     /// <summary>
     ///     Модель настроек.

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\MetersSender.Common\MetersSender.Common.csproj" />
     <ProjectReference Include="..\MetersSender.DataAccess\MetersSender.DataAccess.csproj" />
     <ProjectReference Include="..\MetersSender.Neodom\MetersSender.Neodom.csproj" />
+    <ProjectReference Include="..\MetersSender.Readings\MetersSender.Readings.csproj" />
     <ProjectReference Include="..\MetersSender.Saures\MetersSender.Saures.csproj" />
   </ItemGroup>
 

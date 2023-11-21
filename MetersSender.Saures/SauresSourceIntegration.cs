@@ -1,6 +1,8 @@
 ﻿using MetersSender.Common;
 using MetersSender.Common.Models;
 using MetersSender.Saures.Models;
+using MetersSender.Saures.Models.Configuration;
+using MetersSender.Saures.Models.Requests;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -48,7 +50,7 @@ namespace MetersSender.Saures
         {
             var sid = await GetLoginSidAsync();
 
-            var userObjects = await new RequestService<UserObjectsModel>()
+            var userObjects = await new RequestService<UserObjectsRequest>()
                 .MakeRequestAsync(_config.ApiUrl, "user/objects", Method.Get, new Dictionary<string, string>()
                 {
                     { "sid", sid.ToString() }
@@ -63,7 +65,7 @@ namespace MetersSender.Saures
 
             foreach (var obj in userObjects.Objects)
             {
-                var objectMeters = await new RequestService<ObjectMetersModel>()
+                var objectMeters = await new RequestService<ObjectMetersRequest>()
                     .MakeRequestAsync(_config.ApiUrl, "object/meters", Method.Get, new Dictionary<string, string>()
                     {
                         { "sid", sid.ToString() },
@@ -93,7 +95,7 @@ namespace MetersSender.Saures
 
         private async Task<Guid> GetLoginSidAsync()
         {
-            var requestService = new RequestService<LoginModel>();
+            var requestService = new RequestService<LoginRequest>();
             var result = await requestService.MakeRequestAsync(_config.ApiUrl, "login", Method.Post, new Dictionary<string, string>()
             {
                 { "email", _config.Email },

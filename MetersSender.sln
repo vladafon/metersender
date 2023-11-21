@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Saures", "Mete
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Neodom", "MetersSender.Neodom\MetersSender.Neodom.csproj", "{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetersSender.Readings", "MetersSender.Readings\MetersSender.Readings.csproj", "{ABE3FD5A-F7DA-44D5-83BF-0F63C5E9C03A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A49BD4A1-0277-4773-A1D8-0EF61BEDCF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE3FD5A-F7DA-44D5-83BF-0F63C5E9C03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE3FD5A-F7DA-44D5-83BF-0F63C5E9C03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE3FD5A-F7DA-44D5-83BF-0F63C5E9C03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE3FD5A-F7DA-44D5-83BF-0F63C5E9C03A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

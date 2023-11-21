@@ -15,7 +15,7 @@ namespace MetersSender.Controllers
             _recepientIntegrationApiService = recepientIntegrationApiService;
         }
 
-        [HttpGet(Name = "recepient-meters")]
+        [HttpGet("recepient-meters")]
         public async Task<Result<List<MeterModel>>> GetMetersAsync() =>
             await _recepientIntegrationApiService.GetMetersAsync();
     }

@@ -1,4 +1,4 @@
-﻿using MetersSender.Saures.Models;
+﻿using MetersSender.Saures.Models.Responses;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -40,7 +40,7 @@ namespace MetersSender.Saures
                 throw response.ErrorException ?? new Exception($"Unexpected exception occured during request on {relativeUrl}");
             }
 
-            var result = JsonConvert.DeserializeObject<SauresResult<T>>(response.Content);
+            var result = JsonConvert.DeserializeObject<SauresResponse<T>>(response.Content);
 
             if (result?.Errors?.Count > 0)
             {

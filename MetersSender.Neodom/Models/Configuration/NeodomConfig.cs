@@ -1,4 +1,4 @@
-﻿namespace MetersSender.Neodom.Models
+﻿namespace MetersSender.Neodom.Models.Configuration
 {
     /// <summary>
     ///     Модель настроек.

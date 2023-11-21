@@ -15,11 +15,11 @@ namespace MetersSender.Controllers
             _configurationApiService = configurationApiService;
         }
 
-        [HttpGet(Name = "houses")]
+        [HttpGet("houses")]
         public async Task<Result<List<HouseModel>>> GetHousesAsync() =>
             await _configurationApiService.GetHousesAsync();
 
-        [HttpPost(Name = "house")]
+        [HttpPost("house")]
         public async Task<Result> AddHouseAsync(HouseModel houseModel) =>
             await _configurationApiService.AddHouseAsync(houseModel);
     }

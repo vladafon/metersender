@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Neodom.Models
+namespace MetersSender.Neodom.Models.Responses
 {
-    internal class MetersResponse
+    internal class MetersResponse : NeodomResponse
     {
         [JsonProperty("list_meter")]
         public ListMeter ListMeter { get; set; }

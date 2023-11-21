@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Saures.Models
+namespace MetersSender.Saures.Models.Requests
 {
-    internal class ObjectMetersModel
+    internal class ObjectMetersRequest
     {
         [JsonProperty("sensors")]
         public List<Sensor> Sensors { get; set; }

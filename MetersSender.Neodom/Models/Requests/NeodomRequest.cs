@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Neodom.Models
+namespace MetersSender.Neodom.Models.Requests
 {
-    internal class NeodomModel<T> where T : class
+    internal class NeodomRequest<T> where T : class
     {
         [JsonProperty("name")]
         public string Name { get; set; }

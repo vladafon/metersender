@@ -9,11 +9,9 @@ namespace MetersSender.DataAccess.Database.Configurations
         public void Configure(EntityTypeBuilder<Request> builder)
         {
             builder.HasKey(request => request.RequestId);
-
-            builder.Property(request => request.ReceivingDateTimeUtc)
-                .IsRequired();
             
-            builder.Property(request => request.SendingDateTimeUtc);
+            builder.Property(request => request.SendingDateTimeUtc)
+                .IsRequired();
         }
     }
 }

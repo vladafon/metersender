@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Neodom.Models
+namespace MetersSender.Neodom.Models.Requests.Attributes
 {
     internal class IndicationsAttributes
     {

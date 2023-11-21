@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MetersSender.Saures.Models
+namespace MetersSender.Saures.Models.Requests
 {
-    internal class LoginModel
+    internal class LoginRequest
     {
         [JsonProperty("sid")]
         public Guid Sid { get; set; }

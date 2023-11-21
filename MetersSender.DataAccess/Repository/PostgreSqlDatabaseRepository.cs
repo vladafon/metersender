@@ -1,4 +1,5 @@
-﻿using MetersSender.Common.Models;
+﻿using MetersSender.Common;
+using MetersSender.Common.Models;
 using MetersSender.DataAccess.Database;
 using MetersSender.DataAccess.Database.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +10,12 @@ namespace MetersSender.DataAccess.Repository
     public class PostgreSqlDatabaseRepository : IDatabaseRepository
     {
         private readonly MetersSenderDbContext _dbContext;
-        public PostgreSqlDatabaseRepository(MetersSenderDbContext dbContext) 
+        private readonly IDateTimeProvider _dateTimeProvider;
+        public PostgreSqlDatabaseRepository(MetersSenderDbContext dbContext,
+            IDateTimeProvider dateTimeProvider) 
         { 
             _dbContext = dbContext;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         ///<inheritdoc/>
@@ -40,6 +44,20 @@ namespace MetersSender.DataAccess.Repository
                 await _dbContext.Meters.AddAsync(meter);
             }
 
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task AddMeterReadingAsync(long meterId, decimal readingValue)
+        {
+            await _dbContext.Readings.AddAsync(new Reading
+            {
+                MeterId = meterId,
+                Value = readingValue,
+                Request = new Request
+                {
+                    SendingDateTimeUtc = _dateTimeProvider.UtcNow,
+                }
+            });
             await _dbContext.SaveChangesAsync();
         }
 
@@ -102,6 +120,60 @@ namespace MetersSender.DataAccess.Repository
                 };
 
                 result.Add(houseModel);
+            }
+
+            return result;
+        }
+
+        public async Task<List<ReadingModel>> GetMeterReadingsHistoryAsync(long meterId)
+        {
+            var readings = await _dbContext.Readings
+                .Include(_ => _.Request)
+                .Where(_ => _.MeterId == meterId)
+                .ToListAsync();
+
+            return readings.Select(_ => new ReadingModel
+            {
+                Value = _.Value,
+                SendingDateTime = _.Request.SendingDateTimeUtc
+            })
+            .OrderByDescending(_ => _.SendingDateTime)
+            .ThenByDescending(_ => _.Value)
+            .ToList();
+        }
+
+        public async Task<List<MeterModel>> GetMetersWithLastReadingsAsync(long houseId)
+        {
+            var result = new List<MeterModel>();
+
+            var meters = await _dbContext.Meters
+                .Include(_ => _.Readings)
+                .ThenInclude(_ => _.Request)
+                .Where(_ => _.HouseId == houseId)
+                .ToListAsync();
+
+            foreach (var meter in meters)
+            {
+                var meterModel = new MeterModel
+                {
+                    Id = meter.MeterId.ToString(),
+                    Name = meter.Name,
+                    RecepientMeterId = meter.RecepientMeterId,
+                    SourceMeterId = meter.SourceMeterId
+                };
+
+                var lastReading = meter.Readings
+                    .OrderByDescending(_ => _.Request.SendingDateTimeUtc)
+                    .ThenByDescending(_ => _.Value)
+                    .FirstOrDefault();
+
+                if (lastReading != null)
+                {
+                    meterModel.ReadingValue = lastReading.Value;
+                    meterModel.ReadingSendingDateTime = lastReading.Request.SendingDateTimeUtc;
+                }
+
+                result.Add(meterModel);
             }
 
             return result;
