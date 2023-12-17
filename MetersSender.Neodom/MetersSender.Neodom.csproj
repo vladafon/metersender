@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="neodomconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
@@ -16,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="config.json">
+    <Resource Include="neodomconfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Resource>
   </ItemGroup>
 
 </Project>

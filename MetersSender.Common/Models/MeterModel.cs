@@ -1,15 +1,15 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace MetersSender.Common.Models
 {
     /// <summary>
     ///     Модель с информацией о счетчике.
     /// </summary>
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class MeterModel
     {
         /// <summary>
-        ///     Идентификатор счетчика в системе.
+        ///     Идентификатор счетчика из БД.
         /// </summary>
         [JsonProperty("id", Required = Required.Default)]
         public string Id { get; set; }

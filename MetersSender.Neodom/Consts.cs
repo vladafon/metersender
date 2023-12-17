@@ -2,7 +2,7 @@
 {
     internal class Consts
     {
-        public const string ConfigPath = "../MetersSender.Neodom/config.json";
+        public const string ConfigPath = "/src/MetersSender.Neodom/neodomconfig.json";
         public const string NeodomName = "Neodom";
     }
 }

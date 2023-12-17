@@ -31,15 +31,15 @@ namespace MetersSender.Neodom
 
             var meters = await GetMetersAsync();
 
-            if (!meters.Any(_ => string.Equals(_.Id, meterId)))
+            if (!meters.Any(_ => string.Equals(_.RecepientMeterId, meterId)))
             {
                 return null;
             }
 
-            return meters.Where(_ => string.Equals(_.Id, meterId))
+            return meters.Where(_ => string.Equals(_.RecepientMeterId, meterId))
                 .Select(_ => new MeterModel
                 {
-                    Id = _.Id,
+                    RecepientMeterId = _.RecepientMeterId,
                     Name = _.Name,
                     ReadingValue = _.ReadingValue
                 }).FirstOrDefault();
@@ -96,7 +96,7 @@ namespace MetersSender.Neodom
                 {
                     result.AddRange(metersResponse.ListMeter.ElectricityMeters.Select(_ => new MeterModel
                     {
-                        Id = _.Id.ToString(),
+                        RecepientMeterId = _.Id.ToString(),
                         Name = $"{house.Address} - {_.Name}",
                         ReadingValue = _.LastReading
                     }).ToList());
@@ -106,7 +106,7 @@ namespace MetersSender.Neodom
                 {
                     result.AddRange(metersResponse.ListMeter.WaterMeters.Select(_ => new MeterModel
                     {
-                        Id = _.Id.ToString(),
+                        RecepientMeterId = _.Id.ToString(),
                         Name = $"{house.Address} - {_.Name}",
                         ReadingValue = _.LastReading
                     }).ToList());

@@ -31,15 +31,15 @@ namespace MetersSender.Saures
 
             var meters = await GetMetersAsync();
 
-            if (!meters.Any(_ => string.Equals(_.Id, meterId)))
+            if (!meters.Any(_ => string.Equals(_.SourceMeterId, meterId)))
             {
                 return null;
             }
 
-            return meters.Where(_ => string.Equals(_.Id, meterId))
+            return meters.Where(_ => string.Equals(_.SourceMeterId, meterId))
                 .Select(_ => new MeterModel
             {
-                Id = _.Id,
+                SourceMeterId = _.SourceMeterId,
                 Name = _.Name,
                 ReadingValue = _.ReadingValue
             }).FirstOrDefault();
@@ -87,7 +87,7 @@ namespace MetersSender.Saures
 
             return allObjectMeters.Select(_ => new MeterModel
             {
-                Id = _.Id.ToString(),
+                SourceMeterId = _.Id.ToString(),
                 Name = $"{_.Name} ({_.Type?.Name}) #{_.SerialNumber}",
                 ReadingValue = _.Readings.FirstOrDefault()
             }).ToList();

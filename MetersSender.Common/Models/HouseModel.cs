@@ -5,6 +5,7 @@ namespace MetersSender.Common.Models
     /// <summary>
     ///     Модель виртуального дома со счетчиками.
     /// </summary>
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class HouseModel
     {
         /// <summary>
